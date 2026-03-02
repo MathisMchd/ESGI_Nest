@@ -1,4 +1,4 @@
-import { MangaStatus } from "./manga-status";
+import { MangaStatus } from "./manga-status.interface";
 
 export interface Manga {
   id: number;

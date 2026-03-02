@@ -1,11 +1,13 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { StorageService } from "src/storage/storage.service";
 import { QueryMangaDto } from "./dto/query-manga.dto";
-import { Manga } from "./manga";
+import { Manga } from "./manga.interface";
+import { UpdateMangaDto } from "./dto/update-manga.dto";
+import { CreateMangaDto } from "./dto/create-manga.dto";
 
 @Injectable()
 export class MangasService {
-  constructor(private readonly storage: StorageService) {}
+  constructor(private readonly storage: StorageService) { }
 
   findAll(query: QueryMangaDto) {
     let mangas = this.storage.read<Manga[]>('mangas.json');
@@ -40,5 +42,49 @@ export class MangasService {
         m.author.toLowerCase().includes(term) ||
         m.synopsis.toLowerCase().includes(term),
     );
+  }
+
+  create(dto: CreateMangaDto): Manga {
+    const mangas = this.storage.read<Manga[]>('mangas.json');
+
+    if (mangas.some((m) => m.title.toLowerCase() === dto.title.toLowerCase())) {
+      throw new ConflictException(`A manga titled "${dto.title}" already exists`); // → 409
+    }
+
+    const nextId = Math.max(...mangas.map((m) => m.id), 0) + 1;
+    const newManga: Manga = { id: nextId, ...dto };
+
+    this.storage.write('mangas.json', [...mangas, newManga]);
+    return newManga;
+  }
+
+  replace(id: number, dto: CreateMangaDto): Manga {  // PUT : remplacement complet
+    const mangas = this.storage.read<Manga[]>('mangas.json');
+    const index = mangas.findIndex((m) => m.id === id);
+    if (index === -1) throw new NotFoundException(`Manga with id ${id} not found`);
+
+    const updated = { id, ...dto };    // l'id est conservé, tout le reste est remplacé
+    mangas[index] = updated;
+    this.storage.write('mangas.json', mangas);
+    return updated;
+  }
+
+  update(id: number, dto: UpdateMangaDto): Manga {   // PATCH : fusion partielle
+    const mangas = this.storage.read<Manga[]>('mangas.json');
+    const index = mangas.findIndex((m) => m.id === id);
+    if (index === -1) throw new NotFoundException(`Manga with id ${id} not found`);
+
+    const updated = { ...mangas[index], ...dto };    // spread : seuls les champs fournis sont modifiés
+    mangas[index] = updated;
+    this.storage.write('mangas.json', mangas);
+    return updated;
+  }
+
+  remove(id: number): void {
+    const mangas = this.storage.read<Manga[]>('mangas.json');
+    const index = mangas.findIndex((m) => m.id === id);
+    if (index === -1) throw new NotFoundException(`Manga with id ${id} not found`);
+    mangas.splice(index, 1);
+    this.storage.write('mangas.json', mangas);
   }
 }

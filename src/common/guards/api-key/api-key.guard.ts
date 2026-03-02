@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorators';
+import { IS_PUBLIC_KEY } from '../../decorators/public.decorators';
 import { AuthService } from 'src/auth/auth.service';
 import { Reflector } from '@nestjs/core';
 

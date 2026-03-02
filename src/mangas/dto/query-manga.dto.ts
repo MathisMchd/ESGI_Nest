@@ -1,6 +1,6 @@
 import { IsOptional, IsString, IsInt, Min, Max, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
-import { MangaStatus } from './create-manga.dto';
+import { MangaStatus } from '../manga-status.interface';
 
 export class QueryMangaDto {
   @IsOptional()

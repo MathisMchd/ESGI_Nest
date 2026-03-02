@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty,
          IsEnum, IsInt, Min, Max, MaxLength } from 'class-validator';
-import { MangaStatus } from '../manga-status';
+import { MangaStatus } from '../manga-status.interface';
 
 
 

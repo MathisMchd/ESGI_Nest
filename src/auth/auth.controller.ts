@@ -3,6 +3,7 @@ import type { Request } from 'express';
 import { AuthService } from './auth.service';
 import type { RegisterDto } from './dto/register.dto';
 import { Public } from 'src/common/decorators/public.decorators';
+import { AdminOnly } from 'src/common/decorators/admin.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,7 @@ export class AuthController {
         return this.authService.getMe(user.apiKey);    // → 200
     }
 
+    @AdminOnly()
     @Post('regenerate-key')
     regenerateKey(@Req() req: Request) {
         return this.authService.regenerateKey((req as any).user.apiKey); // → 200 { apiKey }

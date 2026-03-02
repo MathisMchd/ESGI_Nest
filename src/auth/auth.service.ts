@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { StorageService } from 'src/storage/storage.service';
-import { User } from 'src/User';
+import { User } from 'src/auth/user.interface';
 import { v4 as uuidv4 } from 'uuid';
 
 
