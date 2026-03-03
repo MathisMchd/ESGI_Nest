@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { setupSwagger } from './swagger/swagger.config';
 import { setupScalarDocs } from './scalar/scalar.config';
 
