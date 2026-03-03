@@ -58,7 +58,8 @@ export class MangasService {
     return newManga;
   }
 
-  replace(id: number, dto: CreateMangaDto): Manga {  // PUT : remplacement complet
+  // PUT : remplacement complet
+  replace(id: number, dto: CreateMangaDto): Manga {
     const mangas = this.storage.read<Manga[]>('mangas.json');
     const index = mangas.findIndex((m) => m.id === id);
     if (index === -1) throw new NotFoundException(`Manga with id ${id} not found`);
@@ -69,7 +70,8 @@ export class MangasService {
     return updated;
   }
 
-  update(id: number, dto: UpdateMangaDto): Manga {   // PATCH : fusion partielle
+  // PATCH : fusion partielle
+  update(id: number, dto: UpdateMangaDto): Manga {
     const mangas = this.storage.read<Manga[]>('mangas.json');
     const index = mangas.findIndex((m) => m.id === id);
     if (index === -1) throw new NotFoundException(`Manga with id ${id} not found`);
